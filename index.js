@@ -13,13 +13,20 @@ app.use(bodyparser.urlencoded({
 app.use(bodyparser.json())
 
 //Conexion a la base de datos
+const url = `mongodb+srv://${process.env.USUARIO}:${process.env.PASSWORD}@cluster0.qexcvl2.mongodb.net/${process.env.DBNAME}`
+mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log('Conectado a la base de datos'))
+.catch((error) => console.log('Error '+ error))
 
-//CReacion e importacion de rutas
+//Creacion e importacion de rutas
+const authRoutes = require('./routes/auth')
 
 //Ruta del middleware
+app.use('/api/user', authRoutes)
 
 //Ruta raiz
-
 app.get('/', (req, res) => {
     res.json({
         estado:true,
